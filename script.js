@@ -39,10 +39,16 @@ backgroundLayerForest9.src = 'resources/Forest/PNG/Background layers/Layer_0009_
 //10
 const backgroundLayerForest10 = new Image();
 backgroundLayerForest10.src = 'resources/Forest/PNG/Background layers/Layer_0010_1.png'
-let x = 0;
-let x2 = 928;
-let y = -93;
 
+const slider = document.getElementById('slider');
+slider.value = gameSpeed;
+const showGameSpeed = document.getElementById('showGameSpeed');
+showGameSpeed.innerHTML = gameSpeed;
+
+slider.addEventListener('change', function(e){
+    gameSpeed = e.target.value;
+    showGameSpeed.innerHTML = gameSpeed;
+});
 
 class Layer {
 
@@ -51,25 +57,20 @@ class Layer {
         this.y = -93;
         this.width = 928;
         this.height = 793;
-        this.x2 = this.width;
         this.image = image;
         this.speedModifier = speedModifier;
         this.speed = gameSpeed * this.speedModifier;
     }
     update(){
-        this.speedModifier = gameSpeed * this.speedModifier;
+        this.speed = gameSpeed * this.speedModifier;
         if (this.x <= -this.width){
-            this.x = this.width + this.x2 - this.speed;
+            this.x = 0;
         }
-        if (this.x2 <= -this.width){
-            this.x2 = this.width + this.x - this.speed;
-        }
-        this.x = Math.floor(this.x - this.speed);
-        this.x2 = Math.floor(this.x2 - this.speed);
+        this.x = this.x - this.speed;
     }
     draw(){
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        ctx.drawImage(this.image, this.x2, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.x + this.width, this.y, this.width, this.height);
     }
 
 }
@@ -96,6 +97,6 @@ function animate(){
     })
     requestAnimationFrame(animate);
 
-}
+};
 
 animate();
